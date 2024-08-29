@@ -1,11 +1,13 @@
 package main
 
 import (
-	"context"
+	"database/sql"
 	"log"
 	"net"
+	"os"
 
 	"github.com/balajiss36/common"
+	"github.com/go-sql-driver/mysql"
 	"google.golang.org/grpc"
 )
 
@@ -15,6 +17,8 @@ var (
 	mqHost     = common.EnvString("MQ_HOST", "localhost")
 	mqUser     = common.EnvString("MQ_USER", "user")
 	mqPassword = common.EnvString("MQ_PASSWORD", "password")
+	dbUser     = common.EnvString("DBUSER", "root")
+	dbPass     = common.EnvString("DBPASS", "password")
 )
 
 func main() {
@@ -25,12 +29,29 @@ func main() {
 	defer lis.Close()
 	grpcServer := grpc.NewServer()
 
-	store := NewStore()
+	cfg := mysql.Config{
+		User:   os.Getenv("DBUSER"),
+		Passwd: os.Getenv("DBPASS"),
+		Net:    "tcp",
+		Addr:   "localhost:3306",
+		DBName: "oms",
+	}
+	db, err := sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pingErr := db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+
+	store := NewStore(db)
 	svc := NewService(store)
 	NewGRPCHandler(grpcServer, svc)
-	if err := svc.CreateOrder(context.Background()); err != nil {
-		log.Fatalf("error creating order: %v", err)
-	}
+	// if err := svc.CreateOrder(context.Background()); err != nil {
+	// 	log.Fatalf("error creating order: %v", err)
+	// }
 
 	log.Println("Starting server on", grpcAddr)
 

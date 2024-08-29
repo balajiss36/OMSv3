@@ -1,6 +1,10 @@
 package main
 
-import "context"
+import (
+	"context"
+
+	pb "github.com/balajiss36/common/api"
+)
 
 type store struct{}
 
@@ -8,6 +12,6 @@ func NewStore() *store {
 	return &store{}
 }
 
-func (s *store) GetItems(context.Context) error {
-	return nil
+func (s *store) GetItems(ctx context.Context, ids []string) ([]*pb.Item, error) {
+	return nil, nil
 }

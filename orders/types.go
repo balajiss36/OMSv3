@@ -7,10 +7,14 @@ import (
 )
 
 type OrdersService interface {
-	CreateOrder(context.Context) error
-	ValidateOrder(context.Context, *pb.CreateOrderRequest) error
+	GetOrder(ctx context.Context, orderid, customerID string) (*pb.Order, error)
+	CreateOrder(ctx context.Context, p *pb.CreateOrderRequest, items []*pb.Item) (*pb.Order, error)
+	ValidateOrder(context.Context, *pb.CreateOrderRequest) ([]*pb.Item, error)
+	UpdateOrder(context.Context, *pb.Order) (*pb.Order, error)
 }
 
 type OrdersStore interface {
-	Create(context.Context) error
+	Get(ctx context.Context, orderid, customerID string) (*pb.Order, error)
+	Create(ctx context.Context, order *pb.Order) error
+	Update(ctx context.Context, id string, order *pb.Order) (*pb.Order, error)
 }

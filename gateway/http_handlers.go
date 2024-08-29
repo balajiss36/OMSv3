@@ -20,6 +20,7 @@ func NewHandler(api.OrderServiceClient) *handler {
 
 func (h *handler) ServeHTTP(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/customers/{customerID}/orders", h.HandleCreateOrder)
+	mux.HandleFunc("GET /api/customers/{customerID}/orders/orderID", h.HandleGetOrders)
 }
 
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
@@ -64,4 +65,21 @@ func validateItems(items []*pb.ItemsWithQuantity) error {
 		}
 	}
 	return nil
+}
+
+func (h *handler) HandleGetOrders(w http.ResponseWriter, r *http.Request) {
+	customerID := r.URL.Path
+	orderID := r.URL.Path
+
+	o, err := h.client.GetOrder(r.Context(), &pb.GetOrderRequest{
+		CustomerID: customerID,
+		OrderID:    orderID,
+	})
+	errStatus := status.Convert(err)
+	if errStatus != nil {
+		common.WriteError(w, http.StatusBadRequest, errStatus.Err())
+		return
+	}
+
+	common.WriteJSON(w, http.StatusOK, o)
 }

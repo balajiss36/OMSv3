@@ -26,10 +26,11 @@ func NewGRPCHandler(grpcServer *grpc.Server, service OrdersService) *grpcHandler
 	return handler
 }
 
-func (h *grpcHandler) CreateOrder(context.Context, *pb.CreateOrderRequest) (*pb.Order, error) {
+func (h *grpcHandler) CreateOrder(ctx context.Context, p *pb.CreateOrderRequest) (*pb.Order, error) {
 	log.Println("CreateOrder called")
 
-	if err := h.service.ValidateOrder(context.Background(), &pb.CreateOrderRequest{}); err != nil {
+	items, err := h.service.ValidateOrder(context.Background(), &pb.CreateOrderRequest{})
+	if err != nil {
 		return nil, err
 	}
 
@@ -44,21 +45,16 @@ func (h *grpcHandler) CreateOrder(context.Context, *pb.CreateOrderRequest) (*pb.
 	}
 	defer ch.Close()
 
-	queue, err := ch.QueueDeclare("new.order", false, false, false, false, nil)
+	queue, err := ch.QueueDeclare("order.created", false, false, false, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	newOrder := &pb.Order{
-		OrderID: "368",
-		Items: []*pb.Item{
-			{
-				ID:       "123",
-				Name:     "item1",
-				Quantity: 1,
-			},
-		},
+	newOrder, err := h.service.CreateOrder(context.Background(), p, items)
+	if err != nil {
+		return nil, err
 	}
+
 	newOrderBody, err := json.Marshal(newOrder)
 	if err != nil {
 		return nil, err
@@ -74,4 +70,12 @@ func (h *grpcHandler) CreateOrder(context.Context, *pb.CreateOrderRequest) (*pb.
 	log.Println("Order created")
 
 	return newOrder, nil
+}
+
+func (h *grpcHandler) UpdateOrder(ctx context.Context, p *pb.Order) (*pb.Order, error) {
+	return h.service.UpdateOrder(ctx, p)
+}
+
+func (h *grpcHandler) GetOrder(ctx context.Context, p *pb.GetOrderRequest) (*pb.Order, error) {
+	return h.service.GetOrder(ctx, p.OrderID, p.CustomerID)
 }

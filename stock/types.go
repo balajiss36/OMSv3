@@ -1,11 +1,16 @@
 package main
 
-import "context"
+import (
+	"context"
+
+	pb "github.com/balajiss36/common/api"
+)
 
 type Store interface {
-	GetItems(context.Context) error
+	GetItems(ctx context.Context, ids []string) ([]*pb.Item, error)
 }
 
 type StoreService interface {
-	GetItemsList(context.Context) error
+	CheckIfItemAreInStock(context.Context, []*pb.ItemsWithQuantity) (bool, []*pb.Item, error)
+	GetItemsList(ctx context.Context, ids []string) ([]*pb.Item, error)
 }
