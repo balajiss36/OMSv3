@@ -14,7 +14,7 @@ func NewRazorProcessor() *Stripe {
 }
 
 func (s *Stripe) CreatePaymentLink(ctx context.Context, order *pb.Order) (string, error) {
-	client := razorpay.NewClient("ghp_90ik34rtg", "AKCp8nzBt4LK1Nk2XyeKrb8oWEYxxxx")
+	client := razorpay.NewClient("g_90ik34rtg", "gasf34t34t")
 
 	data := map[string]interface{}{
 		"upi_link":     "true",
