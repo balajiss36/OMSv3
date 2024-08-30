@@ -1,0 +1,19 @@
+FROM golang:1.19-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+
+COPY processor processor
+COPY gateway gateway
+
+# copy source
+COPY *.go ./
+
+RUN go build -o main .
+
+EXPOSE 30055
+
+CMD [ "/app/main" ]

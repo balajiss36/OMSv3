@@ -47,7 +47,9 @@ func (g *Consumer) Listen(ctx context.Context) {
 			log.Fatalf("error unmarshalling order: %v", err)
 		}
 		// Update order status
-
+		if order.Status != "order paid" {
+			continue
+		}
 		err := g.gateway.UpdateOrder(ctx, &pb.Order{
 			Status:  "order ready",
 			OrderID: order.OrderID,

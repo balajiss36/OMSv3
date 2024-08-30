@@ -1,0 +1,15 @@
+FROM golang:1.19-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+RUN go mod download
+
+# copy source
+COPY *.go ./
+
+RUN go build -o main .
+
+EXPOSE 30052
+
+CMD [ "/app/main" ]

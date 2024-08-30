@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	grpcAddr   = common.EnvString("GRPC_ADDR", ":30052")
+	grpcAddr   = common.EnvString("GRPC_ADDR", ":30056")
 	mqPort     = common.EnvString("MQ_ADDR", ":5672")
 	mqHost     = common.EnvString("MQ_HOST", "localhost")
 	mqUser     = common.EnvString("MQ_USER", "user")
