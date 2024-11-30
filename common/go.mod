@@ -1,6 +1,6 @@
 module github.com/balajiss36/common
 
-go 1.21.11
+go 1.22.0
 
 require (
 	github.com/streadway/amqp v1.1.0

@@ -9,7 +9,6 @@ RUN go mod download
 COPY processor processor
 COPY gateway gateway
 
-# copy source
 COPY *.go ./
 
 RUN go build -o main .

@@ -8,7 +8,6 @@ RUN go mod download
 
 COPY gateway gateway
 
-# copy source
 COPY *.go ./
 
 RUN go build -o main .
