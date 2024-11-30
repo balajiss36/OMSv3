@@ -1,0 +1,17 @@
+apiVersion: v2
+description: A Helm chart for Order Management System V3
+name: omsv3-chart
+version: 1.0.0
+dependencies:
+  - name: omsv3-gateway
+    version:  1.0.0
+    repository: file://deployments/charts/gateway
+  - name: omsv3-payments
+    version:  1.0.0
+    repository: file://deployments/charts/payments
+  - name: omsv3-orders
+    version: 1.0.0
+    repository: file://deployments/charts/orders
+  - name: omsv3-stock
+    version: 1.0.0
+    repository: file://deployments/charts/stock    

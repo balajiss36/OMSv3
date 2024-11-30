@@ -1,0 +1,15 @@
+dependencies:
+- name: omsv3-gateway
+  repository: file://deployments/charts/gateway
+  version: 1.0.0
+- name: omsv3-payments
+  repository: file://deployments/charts/payments
+  version: 1.0.0
+- name: omsv3-orders
+  repository: file://deployments/charts/orders
+  version: 1.0.0
+- name: omsv3-stock
+  repository: file://deployments/charts/stock
+  version: 1.0.0
+digest: sha256:220158310b433f120ef2bb53708071f3dc3c4bec7df74fa9dbbfedd3e0b332c6
+generated: "2024-11-30T16:59:58.774416+05:30"

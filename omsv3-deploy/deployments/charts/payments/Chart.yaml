@@ -1,0 +1,4 @@
+apiVersion: v2
+name: omsv3-payments
+description: A Helm chart for Kubernetes
+version: 1.0.0
