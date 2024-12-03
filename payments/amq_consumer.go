@@ -6,7 +6,7 @@ import (
 	"log"
 
 	pb "github.com/balajiss36/common/api"
-	common "github.com/balajiss36/common/broker"
+	broker "github.com/balajiss36/common/broker"
 )
 
 type Consumer struct {
@@ -18,11 +18,11 @@ func NewConsumer(service Payments) *Consumer {
 }
 
 func (g *Consumer) Listen(ctx context.Context) {
-	ch, err := common.ConnectMQ(&common.RabbitMQ{
-		Host:     mqHost,
-		User:     mqUser,
-		Password: mqPassword,
-		Port:     mqPort,
+	ch, err := broker.ConnectMQ(&broker.RabbitMQ{
+		// Host:     config.RABBIT_MQ_HOST,
+		// User:     config.RABBIT_MQ_USER,
+		// Password: config.RABBIT_MQ_PASSWORD,
+		// Port:     config.RABBIT_MQ_PORT,
 	})
 	if err != nil {
 		log.Printf("error connecting to rabbitmq: %v", err)

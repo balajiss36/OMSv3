@@ -6,22 +6,19 @@ import (
 	"net/http"
 
 	"github.com/balajiss36/common"
-	common1 "github.com/balajiss36/common/broker"
+	broker "github.com/balajiss36/common/broker"
 	"github.com/balajiss36/payments/gateway"
 	"github.com/balajiss36/payments/processor/razorpay"
 	"google.golang.org/grpc"
 )
 
-var (
-	grpcAddr   = common.EnvString("GRPC_ADDR", ":30055")
-	mqPort     = common.EnvString("MQ_ADDR", ":5672")
-	mqHost     = common.EnvString("MQ_HOST", "localhost")
-	mqUser     = common.EnvString("MQ_USER", "user")
-	mqPassword = common.EnvString("MQ_PASSWORD", "password")
-)
-
 func main() {
-	lis, err := net.Listen("tcp", grpcAddr)
+	config, err := common.LoadConfig(".")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v\n", err)
+	}
+
+	lis, err := net.Listen("tcp", config.GRPCAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -36,11 +33,11 @@ func main() {
 
 	NewTelemetryMiddleware(svc)
 
-	ch, err := common1.ConnectMQ(&common1.RabbitMQ{
-		Host:     mqHost,
-		User:     mqUser,
-		Password: mqPassword,
-		Port:     mqPort,
+	ch, err := broker.ConnectMQ(&broker.RabbitMQ{
+		Host:     config.RABBIT_MQ_HOST,
+		User:     config.RABBIT_MQ_USER,
+		Password: config.RABBIT_MQ_PASSWORD,
+		Port:     config.RABBIT_MQ_PORT,
 	})
 	if err != nil {
 		log.Printf("error connecting to rabbitmq: %v", err)

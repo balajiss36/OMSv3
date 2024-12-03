@@ -8,15 +8,13 @@ import (
 	"google.golang.org/grpc"
 )
 
-var grpcAddr = common.EnvString("GRPC_ADDR", ":30052")
-
-// mqPort     = common.EnvString("MQ_ADDR", ":5672")
-// mqHost     = common.EnvString("MQ_HOST", "localhost")
-// mqUser     = common.EnvString("MQ_USER", "user")
-// mqPassword = common.EnvString("MQ_PASSWORD", "password")
-
 func main() {
-	lis, err := net.Listen("tcp", grpcAddr)
+	config, err := common.LoadConfig(".")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v\n", err)
+	}
+
+	lis, err := net.Listen("tcp", config.GRPCAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

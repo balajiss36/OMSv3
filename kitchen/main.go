@@ -10,24 +10,20 @@ import (
 	"google.golang.org/grpc"
 )
 
-var (
-	grpcAddr = common.EnvString("GRPC_ADDR", ":30058")
-
-	mqPort     = common.EnvString("MQ_ADDR", ":5672")
-	mqHost     = common.EnvString("MQ_HOST", "localhost")
-	mqUser     = common.EnvString("MQ_USER", "user")
-	mqPassword = common.EnvString("MQ_PASSWORD", "password")
-)
-
 func main() {
-	lis, err := net.Listen("tcp", grpcAddr)
+	config, err := common.LoadConfig(".")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v\n", err)
+	}
+
+	lis, err := net.Listen("tcp", config.GRPCAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer lis.Close()
 
 	gw := gateway.NewGateway()
-	conn := NewConsumer(gw)
+	conn := NewConsumer(&config, gw)
 
 	go conn.Listen(context.Background())
 	grpcServer := grpc.NewServer()

@@ -6,24 +6,18 @@ import (
 
 	"github.com/balajiss36/common"
 	pb "github.com/balajiss36/common/api"
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var (
-	httpAddr         = common.EnvString("HTTP_ADDR", ":8080")
-	orderServiceAddr = "localhost:30052"
-)
-
 // const httpAddr = ":8080"
 func main() {
-	err := godotenv.Load()
+	config, err := common.LoadConfig(".")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Failed to load config: %v\n", err)
 	}
 
-	conn, err := grpc.NewClient(orderServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(config.GRPCAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("could not connect to order service: %v", err)
 	}
@@ -36,8 +30,8 @@ func main() {
 	mux := http.NewServeMux()
 	handler := NewHandler(c)
 	handler.ServeHTTP(mux)
-	log.Printf("Starting server on %s", httpAddr)
-	if err := http.ListenAndServe(httpAddr, mux); err != nil {
+	log.Printf("Starting server on %s", config.HTTPAddress)
+	if err := http.ListenAndServe(config.HTTPAddress, mux); err != nil {
 		log.Fatalf("error starting server: %v", err)
 	}
 }

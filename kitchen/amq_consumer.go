@@ -5,25 +5,27 @@ import (
 	"encoding/json"
 	"log"
 
+	common "github.com/balajiss36/common"
 	pb "github.com/balajiss36/common/api"
-	common "github.com/balajiss36/common/broker"
+	broker "github.com/balajiss36/common/broker"
 	"github.com/balajiss36/kitchen/gateway"
 )
 
 type Consumer struct {
+	config  *common.Config
 	gateway gateway.KitchenGateway
 }
 
-func NewConsumer(gateway gateway.KitchenGateway) *Consumer {
-	return &Consumer{gateway}
+func NewConsumer(config *common.Config, gateway gateway.KitchenGateway) *Consumer {
+	return &Consumer{config, gateway}
 }
 
 func (g *Consumer) Listen(ctx context.Context) {
-	ch, err := common.ConnectMQ(&common.RabbitMQ{
-		Host:     mqHost,
-		User:     mqUser,
-		Password: mqPassword,
-		Port:     mqPort,
+	ch, err := broker.ConnectMQ(&broker.RabbitMQ{
+		Host:     g.config.RABBIT_MQ_HOST,
+		User:     g.config.RABBIT_MQ_USER,
+		Password: g.config.RABBIT_MQ_PASSWORD,
+		Port:     g.config.RABBIT_MQ_PORT,
 	})
 	if err != nil {
 		log.Printf("error connecting to rabbitmq: %v", err)
