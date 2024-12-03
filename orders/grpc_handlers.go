@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"log"
 
+	common "github.com/balajiss36/common"
 	pb "github.com/balajiss36/common/api"
-	common "github.com/balajiss36/common/broker"
+	broker "github.com/balajiss36/common/broker"
 	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 )
@@ -14,12 +15,13 @@ import (
 type grpcHandler struct {
 	// this truct implements Order Service interface
 	pb.UnimplementedOrderServiceServer
-
+	config  *common.Config
 	service OrdersService
 }
 
-func NewGRPCHandler(grpcServer *grpc.Server, service OrdersService) *grpcHandler {
+func NewGRPCHandler(config *common.Config, grpcServer *grpc.Server, service OrdersService) *grpcHandler {
 	handler := &grpcHandler{
+		config:  config,
 		service: service,
 	}
 	pb.RegisterOrderServiceServer(grpcServer, handler)
@@ -34,11 +36,11 @@ func (h *grpcHandler) CreateOrder(ctx context.Context, p *pb.CreateOrderRequest)
 		return nil, err
 	}
 
-	ch, err := common.ConnectMQ(&common.RabbitMQ{
-		Host:     mqHost,
-		User:     mqUser,
-		Password: mqPassword,
-		Port:     mqPort,
+	ch, err := broker.ConnectMQ(&broker.RabbitMQ{
+		Host:     h.config.RABBIT_MQ_HOST,
+		User:     h.config.RABBIT_MQ_USER,
+		Password: h.config.RABBIT_MQ_PASSWORD,
+		Port:     h.config.RABBIT_MQ_PORT,
 	})
 	if err != nil {
 		return nil, err

@@ -1,59 +1,42 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"log"
 	"net"
-	"os"
 
 	"github.com/balajiss36/common"
-	"github.com/go-sql-driver/mysql"
 	"google.golang.org/grpc"
 )
 
-var (
-	grpcAddr   = common.EnvString("GRPC_ADDR", ":30056")
-	mqPort     = common.EnvString("MQ_ADDR", ":5672")
-	mqHost     = common.EnvString("MQ_HOST", "localhost")
-	mqUser     = common.EnvString("MQ_USER", "user")
-	mqPassword = common.EnvString("MQ_PASSWORD", "password")
-	dbUser     = common.EnvString("DBUSER", "root")
-	dbPass     = common.EnvString("DBPASS", "password")
-)
-
 func main() {
-	lis, err := net.Listen("tcp", grpcAddr)
+	config, err := common.LoadConfig(".")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v\n", err)
+	}
+
+	lis, err := net.Listen("tcp", config.GRPCAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer lis.Close()
 	grpcServer := grpc.NewServer()
 
-	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net:    "tcp",
-		Addr:   "localhost:3306",
-		DBName: "oms",
-	}
-	db, err := sql.Open("mysql", cfg.FormatDSN())
+	client, err := common.SetupMongoDB(context.Background(), config)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to connect to MongoDB: %v\n", err)
 	}
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
+	defer common.CloseConnection(context.Background(), client)
 
-	store := NewStore(db)
+	store := NewStore(client)
 	svc := NewService(store)
-	NewGRPCHandler(grpcServer, svc)
+	NewGRPCHandler(&config, grpcServer, svc)
 	// if err := svc.CreateOrder(context.Background()); err != nil {
 	// 	log.Fatalf("error creating order: %v", err)
 	// }
 
-	log.Println("Starting server on", grpcAddr)
+	log.Println("Starting server on", config.GRPCAddress)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("error starting server: %v", err)
