@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/balajiss36/common/api";
+option go_package = "github.com/balajiss36/omsv3/common/api";
 
 package api;
 

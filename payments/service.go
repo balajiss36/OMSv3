@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
-	pb "github.com/balajiss36/common/api"
-	"github.com/balajiss36/payments/gateway"
-	"github.com/balajiss36/payments/processor"
+	pb "github.com/balajiss36/omsv3/common/api"
+	"github.com/balajiss36/omsv3/payments/gateway"
+	"github.com/balajiss36/omsv3/payments/processor"
 )
 
 type service struct {

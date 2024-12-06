@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	pb "github.com/balajiss36/common/api"
-	"github.com/balajiss36/orders/gateway"
+	pb "github.com/balajiss36/omsv3/common/api"
+	"github.com/balajiss36/omsv3/orders/gateway"
 )
 
 type service struct {

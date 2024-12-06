@@ -4,9 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/balajiss36/common"
-	"github.com/balajiss36/common/api"
-	pb "github.com/balajiss36/common/api"
+	"github.com/balajiss36/omsv3/common"
+	"github.com/balajiss36/omsv3/common/api"
+	pb "github.com/balajiss36/omsv3/common/api"
 	"google.golang.org/grpc/status"
 )
 

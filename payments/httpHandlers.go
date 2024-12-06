@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	pb "github.com/balajiss36/common/api"
-	models "github.com/balajiss36/common/models"
+	pb "github.com/balajiss36/omsv3/common/api"
+	models "github.com/balajiss36/omsv3/common/models"
 	"github.com/streadway/amqp"
 )
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/balajiss36/common/api"
+	pb "github.com/balajiss36/omsv3/common/api"
 	"go.opentelemetry.io/otel/trace"
 )
 

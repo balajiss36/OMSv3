@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/balajiss36/common"
+	"github.com/balajiss36/omsv3/common"
 	"google.golang.org/grpc"
 )
 

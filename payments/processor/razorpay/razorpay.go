@@ -3,7 +3,7 @@ package razorpay
 import (
 	"context"
 
-	pb "github.com/balajiss36/common/api"
+	pb "github.com/balajiss36/omsv3/common/api"
 	razorpay "github.com/razorpay/razorpay-go"
 )
 

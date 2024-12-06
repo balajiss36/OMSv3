@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"log"
 
-	common "github.com/balajiss36/common"
-	pb "github.com/balajiss36/common/api"
-	broker "github.com/balajiss36/common/broker"
-	"github.com/balajiss36/kitchen/gateway"
+	common "github.com/balajiss36/omsv3/common"
+	pb "github.com/balajiss36/omsv3/common/api"
+	broker "github.com/balajiss36/omsv3/common/broker"
+	"github.com/balajiss36/omsv3/kitchen/gateway"
 )
 
 type Consumer struct {

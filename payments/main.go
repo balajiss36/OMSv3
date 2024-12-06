@@ -5,10 +5,10 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/balajiss36/common"
-	broker "github.com/balajiss36/common/broker"
-	"github.com/balajiss36/payments/gateway"
-	"github.com/balajiss36/payments/processor/razorpay"
+	"github.com/balajiss36/omsv3/common"
+	broker "github.com/balajiss36/omsv3/common/broker"
+	"github.com/balajiss36/omsv3/payments/gateway"
+	"github.com/balajiss36/omsv3/payments/processor/razorpay"
 	"google.golang.org/grpc"
 )
 

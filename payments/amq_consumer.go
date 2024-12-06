@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"log"
 
-	pb "github.com/balajiss36/common/api"
-	broker "github.com/balajiss36/common/broker"
+	pb "github.com/balajiss36/omsv3/common/api"
+	broker "github.com/balajiss36/omsv3/common/broker"
 )
 
 type Consumer struct {

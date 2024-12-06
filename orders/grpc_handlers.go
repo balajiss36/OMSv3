@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"log"
 
-	common "github.com/balajiss36/common"
-	pb "github.com/balajiss36/common/api"
-	broker "github.com/balajiss36/common/broker"
+	common "github.com/balajiss36/omsv3/common"
+	pb "github.com/balajiss36/omsv3/common/api"
+	broker "github.com/balajiss36/omsv3/common/broker"
 	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 )
@@ -31,7 +31,7 @@ func NewGRPCHandler(config *common.Config, grpcServer *grpc.Server, service Orde
 func (h *grpcHandler) CreateOrder(ctx context.Context, p *pb.CreateOrderRequest) (*pb.Order, error) {
 	log.Println("CreateOrder called")
 
-	items, err := h.service.ValidateOrder(context.Background(), &pb.CreateOrderRequest{})
+	items, err := h.service.ValidateOrder(context.Background(), p)
 	if err != nil {
 		return nil, err
 	}

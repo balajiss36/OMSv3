@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
-	pb "github.com/balajiss36/common/api"
+	pb "github.com/balajiss36/omsv3/common/api"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -23,7 +22,8 @@ func (s *store) Create(ctx context.Context, order *pb.Order) error {
 
 	_, err := collection.InsertOne(context.Background(), order)
 	if err != nil {
-		fmt.Errorf("Error inserting order: %v", err)
+		log.Fatalf("Error inserting order: %v", err)
+		return err
 	}
 
 	log.Println("Order Created")
@@ -37,7 +37,8 @@ func (s *store) Update(ctx context.Context, id string, order *pb.Order) (*pb.Ord
 	update := bson.M{"$set": order}
 	mongoResult := collection.FindOneAndUpdate(context.Background(), filter, update)
 	if mongoResult.Err() != nil {
-		fmt.Errorf("Error updating order: %v", mongoResult.Err())
+		log.Fatalf("Error updating order: %v", mongoResult.Err())
+		return nil, mongoResult.Err()
 	}
 
 	log.Println("Order Updated")
@@ -53,12 +54,14 @@ func (s *store) Get(ctx context.Context, orderid, customerID string) (*pb.Order,
 	filter := bson.M{"ID": customerID}
 	cursor, err := collection.Find(context.Background(), filter)
 	if err != nil {
-		fmt.Errorf("Error getting data order from cursor: %v", err)
+		log.Fatalf("Error getting data order from cursor: %v", err)
+		return nil, err
 	}
 
 	err = cursor.All(context.Background(), &order)
 	if err != nil {
-		fmt.Errorf("Error getting order: %v", err)
+		log.Fatalf("Error getting order: %v", err)
+		return nil, err
 	}
 	defer cursor.Close(context.Background())
 

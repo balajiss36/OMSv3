@@ -10,8 +10,8 @@ vet: ## Run go vet against code.
 	go vet ./...    
 
 
-helm-install: ## Install all Helm charts in the specified namespace.
-    helm install omsv3-gateway deployments/charts/gateway --namespace omsv3
-    helm install omsv3-payments deployments/charts/payments --namespace omsv3
-    helm install omsv3-orders deployments/charts/orders --namespace omsv3
-    helm install omsv3-stock deployments/charts/stock --namespace omsv3    
+# helm-install: ## Install all Helm charts in the specified namespace.
+#     helm install omsv3-gateway deployments/charts/gateway --namespace omsv3
+#     helm install omsv3-payments deployments/charts/payments --namespace omsv3
+#     helm install omsv3-orders deployments/charts/orders --namespace omsv3
+#     helm install omsv3-stock deployments/charts/stock --namespace omsv3    

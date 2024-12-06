@@ -1,4 +1,4 @@
-module github.com/balajiss36/orders
+module github.com/balajiss36/omsv3/orders
 
 go 1.22.0
 

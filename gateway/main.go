@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/balajiss36/common"
-	pb "github.com/balajiss36/common/api"
+	"github.com/balajiss36/omsv3/common"
+	pb "github.com/balajiss36/omsv3/common/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -17,6 +17,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v\n", err)
 	}
 
+	// call order grpc service
 	conn, err := grpc.NewClient(config.GRPCAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("could not connect to order service: %v", err)

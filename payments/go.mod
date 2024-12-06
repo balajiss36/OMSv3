@@ -1,4 +1,4 @@
-module github.com/balajiss36/payments
+module github.com/balajiss36/omsv3/payments
 
 go 1.22.0
 
