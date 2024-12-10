@@ -1,6 +1,6 @@
 module github.com/balajiss36/omsv3/payments
 
-go 1.22.0
+go 1.22.9
 
 require (
 	github.com/razorpay/razorpay-go v1.3.2 // indirect

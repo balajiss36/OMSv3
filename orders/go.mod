@@ -1,6 +1,6 @@
 module github.com/balajiss36/omsv3/orders
 
-go 1.22.0
+go 1.22.9
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
